@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <link >
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="fontawesome/css/all.css" rel="stylesheet">
+
+    <title>"Rate" example</title>
+  </head>
+  <body class="container">
+
+    <div style="text-align:center;  position: relative; 
+     position: absolute; top: 50%;left: 50%; margin-right: -50%;transform: translate(-50%, -50%);">
+    
+    <h3>Pesquisa de Satisfação</h3>
+    <input type="radio" class="radio-item" value="1" name="item" id="radio1" />
+    <label class="label-item" for="radio1">
+        <i class="fas fa-tired tired_css"  ></i>1
+    </label>
+  
+
+    <input type="radio" class="radio_item" value="2" name="item" id="radio2" />
+    <label class="label_item" for="radio2">
+        <i class="fas fa-tired tired_css"  ></i>2
+    </label>
+
+    <input type="radio" class="radio_item" value="3" name="item" id="radio3" />
+    <label class="label_item" for="radio3">
+        <i class="fas fa-tired tired_css"  ></i> 3
+    </label>
+
+    <input type="radio" class="radio_item" value="4" name="item" id="radio4" />
+    <label class="label_item" for="radio4">
+        <i class="fas fa-tired tired_css"  ></i> 4
+    </label>
+
+    <input type="radio" class="radio_item" value="5" name="item" id="radio5" />
+    <label class="label_item" for="radio5">
+        <i class="fas fa-tired tired_css"  ></i>5
+    </label>
+    <input type="radio"  class="radio_item" value="6" name="item" id="radio6" />
+    <label class="label_item" for="radio6">
+        <i class="fas fa-frown frown_css"  ></i>6
+    </label>
+    <input type="radio" class="radio_item" value="7" name="item" id="radio7" />
+    <label class="label_item" for="radio7">
+        <i class="fas fa-meh meh_css"  ></i> 7
+    </label>
+    <input type="radio" class="radio_item" value="8" name="item" id="radio8" />
+    <label class="label_item" for="radio8">
+        <i class="fas fa-meh meh_css"  ></i>8
+    </label>
+    <input type="radio" class="radio_item" value="9" name="item" id="radio9" />
+    <label class="label_item" for="radio9">
+        <i class="fas fa-smile-beam radio_css"  ></i>9
+    </label>
+    <input type="radio" class="radio_item" value="10" name="item" id="radio10" />
+    <label class="label_item" for="radio10">
+        <i class="fas fa-laugh-squint radio_css"  ></i>10
+    </label>
+
+    <div class="mb-3" > 
+        <textarea class= "form-control" rows="5" cols="30" name="comentarios" id="coment" 
+        maclength="250" placeholder= "Escreva um comentário (máx. 250 caracteres)"></textarea>
+    </div>
+
+        <button class= "btn btn-dark" onclick="getSelected()">Enviar Comentário</button>
+      <script>
+        const getSelected = () => {
+          // seleciono o elemento pela tag + checked e pego o valor com o .value
+          const selected = document.querySelector("input:checked")?.value;
+          if (!selected){
+            return alert("Você não selecionou o nível de satisfação")
+          }
+          // se há algo selecionado, solto um alert com o valor
+          
+          const id=getQueryParam("id");
+          const coment= document.querySelector("textarea").value;  
+          const body = {
+            id,coment,valor:selected
+          } 
+          document.querySelector("button").disabled=true
+          document.querySelector("textarea").disabled=true
+          console.log(body)
+          fetch("http://127.0.0.1:5000/", {method:"POST", body:JSON.stringify(body), headers:{
+            "content-type": "application/json"
+          }})
+          .then(r => r.json())
+          .then(response =>{
+            console.log(response)
+          }).finally(()=>{
+            document.querySelector("button").disabled=false
+            document.querySelector("button").disabled=false
+          })
+        }
+          const getQueryParam = (prop) => {
+         var params = {};
+         var search = decodeURIComponent(
+          window.location.href.slice(window.location.href.indexOf('?') + 1)
+         );
+         var definitions = search.split('&');
+         definitions.forEach(function (val, key) {
+         const parts = val.split('=', 2);
+         params[parts[0]] = parts[1];
+  });
+  return prop && prop in params ? params[prop] : params;
+}
+      </script>
+
+  </body>
+</div>
+  <style>
+    input {
+      display: none !important;
+    }
+
+    .radio_css {
+        font-size: 60px;
+        color: rgb(5, 104, 18);
+     }
+    .meh_css {
+        font-size: 60px;
+        color: rgba(247, 196, 27, 0.986);
+    }
+    #coment{
+            display: block;
+            position: relative;
+
+        }
+
+    .tired_css {
+        font-size: 60px;
+        color: rgba(247, 27, 27, 0.74);
+
+     }
+    .frown_css {
+        font-size: 60px;
+        color: rgba(240, 97, 14, 0.801);
+
+     }
+
+    label {
+      opacity: 0.1;
+    }
+
+    input:checked + label {
+      opacity: 1;
+    }
+
+    label {
+      cursor: pointer;
+    }
+  </style>
+</html>
